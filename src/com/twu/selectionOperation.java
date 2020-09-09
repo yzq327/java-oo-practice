@@ -261,8 +261,9 @@ public class selectionOperation {
 			newHot= so.removeString(newHot, oldIndex);//删除原来的购买的热搜
 			hotnumbers=so.removeInt(hotnumbers, oldIndex);//删除原来的购买的热搜票数
 			hotMoney=so.removeInt(hotMoney, hotMoney.length-1);//删除最后一位的购买热搜金额
-			superHot=so.removeInt(superHot,hotMoney.length-1);//删除超级热搜的最后一位
-			costHot=so.removeInt(costHot,hotMoney.length-1);//删除购买热搜的最后一位
+			superHot=so.removeInt(superHot,superHot.length-1);//删除超级热搜的最后一位
+			costHot=so.removeInt(costHot,costHot.length-1);//删除购买热搜的最后一位
+			hotSort=so.removeInt(hotSort,hotSort.length-1);//删除热搜排名的最后一位
 		}			
 		//hot=newHot;//更新热搜排行
 		/*
