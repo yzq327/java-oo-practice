@@ -84,7 +84,7 @@ public class selectionOperation {
 	//当输入数字为1时,查看热搜排行榜
 	public void adminNumerIs1() {
 		if(hot != null && hot.length != 0) {				
-			for(int i=0;i<hot.length;i++) {//打印热搜
+			for(int i=0;i<hot.length; i++) {//打印热搜
 				System.out.println(hotSort[i]+" "+hot[i]+" "+ hotnumbers[i]);
 			}
 		}
@@ -147,7 +147,7 @@ public class selectionOperation {
 		String[] newHot = hot;		
 		for(int i=0;i<newHot.length;i++) { //查找相应匹配的热搜
 			if(newHot[i].equals(inputHot2)) {//当输入的值与热搜可以匹配
-				System.out.println("superHot[i]:"+superHot[i]);
+				//System.out.println("superHot[i]:"+superHot[i]);
 				if(superHot[i] == 1) {//当该热搜为超级热搜时				
 					hotnumbers[i]=hotnumbers[i]+2*userVote;//用户投票数乘以2
 					//inputName.voteNumber=inputName.voteNumber-2*userVote;//更新可投票的票数	
@@ -230,21 +230,7 @@ public class selectionOperation {
 			hotnumbers[oldIndex]=hotnumbers[intputMunber];//交换更新热搜的票数
 			hotnumbers[intputMunber]=tempInt;
 			hotMoney[intputMunber]=cost;//更新该热搜位的购买金额
-		/*
-		if(oldIndex > intputMunber) {//如果购买的热搜位在原有位置之前
-			for(int i=intputMunber; i<oldIndex;i++) {
-				if(i == intputMunber) {//将购买位的热搜换为购买的热搜
-					String tempHot=newHot[oldIndex];
-					newHot[oldIndex]=newHot[intputMunber];//交换更新热搜的位置
-					newHot[intputMunber]=tempHot;
-					int tempInt=hotnumbers[oldIndex];
-					hotnumbers[oldIndex]=hotnumbers[intputMunber];//交换更新热搜的票数
-					hotnumbers[intputMunber]=tempInt;
-					}else { //其余为顺位下移						
-					}
-				}				
-			}else(oldIndex < intputMunber)//如果购买的热搜位在原有位置之后			
-		*/							
+
 		}else { //该热搜不是首次购买，原来的热搜被挤掉并消失不见	
 			for(int i=0;i<newHot.length;i++) { //查找相应匹配的热搜
 				if(newHot[i].equals(inputHot)) {//当输入的值与热搜可以匹配					
@@ -257,90 +243,18 @@ public class selectionOperation {
 			int tempInt=hotnumbers[oldIndex];
 			hotnumbers[oldIndex]=hotnumbers[intputMunber];//交换更新热搜的票数
 			hotnumbers[intputMunber]=tempInt;
-			hotMoney[intputMunber]=cost;//更新该热搜位的购买金额	 	
-			newHot= so.removeString(newHot, oldIndex);//删除原来的购买的热搜
+			hotMoney[intputMunber]=cost;//更新该热搜位的购买金额
+			hot=newHot;
+			hot= so.removeString(hot, oldIndex);//删除原来的购买的热搜
 			hotnumbers=so.removeInt(hotnumbers, oldIndex);//删除原来的购买的热搜票数
 			hotMoney=so.removeInt(hotMoney, hotMoney.length-1);//删除最后一位的购买热搜金额
 			superHot=so.removeInt(superHot,superHot.length-1);//删除超级热搜的最后一位
 			costHot=so.removeInt(costHot,costHot.length-1);//删除购买热搜的最后一位
 			hotSort=so.removeInt(hotSort,hotSort.length-1);//删除热搜排名的最后一位
-		}			
-		//hot=newHot;//更新热搜排行
-		/*
-		if(hotMoney[intputMunber]== 0) {//这是该热搜被首次购买
-			if(oldIndex > intputMunber) {//如果购买的热搜位在原有位置之前)
-				infrontCostSort(newHot,inputHot, intputMunber);
-			}if(oldIndex < intputMunber) {//如果购买的热搜位在原有位置之后)
-				afterCostSort(newHot,inputHot, intputMunber);
-			}			
-			
-		*/
+		}
 		hot=so.sortHot();//更新热搜排行
 	}
-	
-	//如果购买的热搜位在原有位置之前
-	public static void infrontCostSort(String[] newHot,String inputHot,int intputMunber) {
-		int len=hot.length;
-		int i=len-1;
-		int costHot=0;//买的热搜
-		int costHotVote=0;
-		while(i>=0 ) {
-			if(!newHot[i].equals(inputHot)) {
-				if(i==intputMunber) {
-					if( costHot > 0 ) {
-						newHot[i+costHot] = newHot[i];
-						hotnumbers[i+costHot] = hotnumbers[i];
-						costHot--;
-					}else {
-						newHot[i]=inputHot;
-						hotnumbers[i+costHot] =costHotVote;
-						i--;
-					}							
-				}else {
-					newHot[i+costHot] = newHot[i];
-					hotnumbers[i+costHot] = hotnumbers[i];
-					i--;
-				}							
-			}else {	
-				costHotVote=hotnumbers[i];
-				costHot++;
-				i--;
-			}
-		}		
-		
-	}
-	
-	//如果购买的热搜位在原有位置之后
-	public static void afterCostSort(String[] newHot,String inputHot,int intputMunber) {
-		int len=hot.length;
-		int i=0;
-		int costHot=0;//买的热搜
-		int costHotVote=0;
-		while(i < len ) {
-			if(!newHot[i].equals(inputHot)) {
-				if(i==intputMunber) {
-					if( costHot > 0 ) {
-						newHot[i-costHot] = newHot[i];
-						hotnumbers[i-costHot] = hotnumbers[i];
-						costHot--;
-					}else {
-						newHot[i]=inputHot;
-						hotnumbers[i-costHot] =costHotVote;
-						i++;
-					}							
-				}else {
-					newHot[i-costHot] = newHot[i];
-					hotnumbers[i-costHot] = hotnumbers[i];
-					i++;
-				}							
-			}else {	
-				costHotVote=hotnumbers[i];
-				costHot++;
-				i++;
-			}
-		}			
-	}
-		
+
 	// 往字符串数组追加新数据
 	private String[] insertString(String[] hot, String inputHot) {
 		// TODO Auto-generated method stub
