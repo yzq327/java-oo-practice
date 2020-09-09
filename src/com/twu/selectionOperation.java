@@ -146,7 +146,8 @@ public class selectionOperation {
 	public void changeHot(String inputHot2,int userVote) {			
 		String[] newHot = hot;		
 		for(int i=0;i<newHot.length;i++) { //查找相应匹配的热搜
-			if(newHot[i].equals(inputHot2)) {//当输入的值与热搜可以匹配				
+			if(newHot[i].equals(inputHot2)) {//当输入的值与热搜可以匹配
+				System.out.println("superHot[i]:"+superHot[i]);
 				if(superHot[i] == 1) {//当该热搜为超级热搜时				
 					hotnumbers[i]=hotnumbers[i]+2*userVote;//用户投票数乘以2
 					//inputName.voteNumber=inputName.voteNumber-2*userVote;//更新可投票的票数	
@@ -156,7 +157,9 @@ public class selectionOperation {
 				
 			}
 		}
-		inputName.voteNumber=inputName.voteNumber-userVote;//更新可投票的票数	
+		inputName.voteNumber=inputName.voteNumber-userVote;//更新可投票的票数
+
+		/*
 		if(hotnumbers.length>1) {//存在多个热搜时
 			for(int i=0;i<hotnumbers.length-1;i++) {				
 				for(int j=i+1;j<hotnumbers.length;j++) {//判断票数
@@ -179,8 +182,34 @@ public class selectionOperation {
 					}
 				}
 			}
-		}		
+		}
 		hot=newHot;//更新热搜排行
+		*/
+
+		hot=so.sortHot();//更新热搜排行
+	}
+
+	public String[] sortHot(){
+		String[] newHot = hot;
+		if(hotnumbers.length>1) {//存在多个热搜时
+			for(int i=0;i<hotnumbers.length-1;i++) {
+				for(int j=i+1;j<hotnumbers.length;j++) {//判断票数
+					if(hotnumbers[i]<hotnumbers[j] && costHot[i] !=1) {//当票数更高的在后面，且该位不是购买热搜位时，进行交换
+						int tempint=hotnumbers[i];
+						hotnumbers[i]=hotnumbers[j];//交换票数
+						hotnumbers[j]=tempint;
+						//superHotIndex=j;//更新超级热搜的位置索引
+						String tempHot=newHot[i];
+						newHot[i]=newHot[j];//交换热搜
+						newHot[j]=tempHot;
+						int tempSuper=superHot[i];
+						superHot[i]=superHot[j];
+						superHot[j]=tempSuper;
+					}
+				}
+			}
+		}
+		return newHot;
 	}
 			
 	//对购买后的热搜排名进行修改
@@ -193,7 +222,7 @@ public class selectionOperation {
 				oldIndex=i;//保存该热搜的原来位置
 			}
 		}
-		if(hotMoney[intputMunber]== 0) {//将购买位的热搜换为购买的热搜
+		if(hotMoney[intputMunber]== 0) {//首次购买的热搜
 			String tempHot=newHot[oldIndex];
 			newHot[oldIndex]=newHot[intputMunber];//交换更新热搜的位置
 			newHot[intputMunber]=tempHot;
@@ -201,7 +230,7 @@ public class selectionOperation {
 			hotnumbers[oldIndex]=hotnumbers[intputMunber];//交换更新热搜的票数
 			hotnumbers[intputMunber]=tempInt;
 			hotMoney[intputMunber]=cost;//更新该热搜位的购买金额
-		/*	
+		/*
 		if(oldIndex > intputMunber) {//如果购买的热搜位在原有位置之前
 			for(int i=intputMunber; i<oldIndex;i++) {
 				if(i == intputMunber) {//将购买位的热搜换为购买的热搜
@@ -232,8 +261,10 @@ public class selectionOperation {
 			newHot= so.removeString(newHot, oldIndex);//删除原来的购买的热搜
 			hotnumbers=so.removeInt(hotnumbers, oldIndex);//删除原来的购买的热搜票数
 			hotMoney=so.removeInt(hotMoney, hotMoney.length-1);//删除最后一位的购买热搜金额
+			superHot=so.removeInt(superHot,hotMoney.length-1);//删除超级热搜的最后一位
+			costHot=so.removeInt(costHot,hotMoney.length-1);//删除购买热搜的最后一位
 		}			
-		hot=newHot;//更新热搜排行		
+		//hot=newHot;//更新热搜排行
 		/*
 		if(hotMoney[intputMunber]== 0) {//这是该热搜被首次购买
 			if(oldIndex > intputMunber) {//如果购买的热搜位在原有位置之前)
@@ -242,7 +273,8 @@ public class selectionOperation {
 				afterCostSort(newHot,inputHot, intputMunber);
 			}			
 			
-		*/	
+		*/
+		hot=so.sortHot();//更新热搜排行
 	}
 	
 	//如果购买的热搜位在原有位置之前
